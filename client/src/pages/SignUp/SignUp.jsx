@@ -40,45 +40,56 @@ const SignUp = () => {
     {/* Signup Form */}
 
       <div className='flex items-center justify-center mt-20'>
+
         <div className='w-96 border rounded bg-white px-7 py-10'>
-            <form onSubmit={handleSignup}>
-                <h4 className='text-2xl mb-7'>SignUp</h4>
 
-                <input 
-                  type="text" 
-                  placeholder='Name'
-                  className='input-box'
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+          <form onSubmit={handleSignup}>
 
-                <input 
-                  type="email" 
-                  placeholder='Email'
-                  className='input-box'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+            <h4 className='text-2xl mb-7'>SignUp</h4>
 
-                <PasswordInput
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+            <input 
+              type="text" 
+              placeholder='Name'
+              className='input-box'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
 
-                {
-                  error && <p className='text-red-500 text-xs pb-1'>{error}</p>
-                }
+            <input 
+              type="email" 
+              placeholder='Email'
+              className='input-box'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-                <button type='submit' className='btn-primary'>Login</button>
+            <PasswordInput
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-                <p className='text-sm text-center mt-4'>
-                    Already have an account?{" "}
-                    <Link to="/login" className='font-medium text-primary underline'>
-                        Login
-                    </Link>
-                </p>
-            </form>
+            {
+              error && <p className='text-red-500 text-xs pb-1'>{error}</p>
+            }
+
+            <button 
+              type='submit' 
+              className='btn-primary'
+            >
+              Login
+            </button>
+
+            <p className='text-sm text-center mt-4'>
+                Already have an account?{" "}
+                <Link to="/login" className='font-medium text-primary underline'>
+                    Login
+                </Link>
+            </p>
+
+          </form>
+
         </div>
+        
       </div>
     </> 
   )

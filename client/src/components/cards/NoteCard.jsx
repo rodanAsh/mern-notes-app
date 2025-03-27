@@ -31,7 +31,7 @@ const NoteCard = ({
         <div className=''>
             <div className='text-xs text-slate-500'>{tags}</div>
 
-            <div className=''>
+            <div className='flex gap-2 justify-end'>
                 <MdCreate
                     onClick={onEdit}
                     className='icon-btn hover:text-green-600'
