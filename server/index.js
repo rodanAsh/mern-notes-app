@@ -211,6 +211,90 @@ app.put("/edit-note/:noteId", authenticateToken, async(req,res) => {
     }
 })
 
+// Get all notes
+app.get("/get-all-notes", authenticateToken, async(req,res) => {
+    const { user } = req.user;
+
+    try {
+        const notes = await Note.find({ userId: user._id }).sort({ isPinned: -1 })
+
+        return res.json({
+            error: false,
+            notes,
+            message: "All notes retrieved successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: true,
+            message: "Internal Server Error"
+        });
+    }
+})
+
+// delete note
+app.delete("/delete-note/:noteId", authenticateToken, async(req,res) => {
+    const noteId = req.params.noteId;
+    const user = req.user;
+
+    try{
+        const note = await Note.findOne({ _id: noteId, userId: user._id })
+
+        if (!note) {
+            return res.status(404).json({ error: true, message: "Note not found" })
+        }
+
+        await Note.deleteOne({ _id: noteId, userId: user._id })
+
+        return res.json({
+            error: false,
+            message: "Note deleted successfully"
+        })
+    } catch(error) {
+        return res.status(500).json({
+            error: true,
+            message: "Internal Server Error"
+        })
+    }
+})
+
+// update isPinned value
+app.put("/update-note-pinned/:noteId", authenticateToken, async(req,res) => {
+    const noteId = req.params.noteId;
+    const { isPinned } = req.body;
+    const { user } = re.user;
+
+    if (!isPinned) {
+        return res.status(400).json({
+            error: true,
+            message: "No changes provided"
+        })
+    }
+
+    try {
+        const note = await Note.findOne({ _id: noteId, uerId: user._id })
+
+        if (!note) {
+            return res
+                .status(404)
+                .json({ error: true, message: "Note Not Found" })
+        }
+
+        note.isPinned = isPinned;
+
+        await note.save();
+
+        return res.json({
+            error: false,
+            message: "Note updated successfully"
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: true,
+            message: "Internal Server Error"
+        })
+    }
+})
+
 app.listen(port, () => {
     console.log(`server running at http://localhost:${port}`)
 });
