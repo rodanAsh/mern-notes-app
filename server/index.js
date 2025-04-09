@@ -250,7 +250,7 @@ app.get("/get-all-notes", authenticateToken, async(req,res) => {
 // delete note
 app.delete("/delete-note/:noteId", authenticateToken, async(req,res) => {
     const noteId = req.params.noteId;
-    const user = req.user;
+    const { user } = req.user;
 
     try{
         const note = await Note.findOne({ _id: noteId, userId: user._id })

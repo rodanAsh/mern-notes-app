@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { MdOutlinePushPin, MdCreate, MdDelete } from 'react-icons/md'
 
 const NoteCard = ({
@@ -17,7 +18,7 @@ const NoteCard = ({
         <div className='flex items-center justify-between'>
             <div>
                 <h6 className='text-sm font-medium'>{title}</h6>
-                <span className='text-xs text-slate-500'>{date}</span>
+                <span className='text-xs text-slate-500'>{moment(date).format("DD MMM YYYY")}</span>
             </div>
             
             <MdOutlinePushPin 
@@ -29,7 +30,7 @@ const NoteCard = ({
         <p>{content?.slice(0, 60)}</p>
 
         <div className=''>
-            <div className='text-xs text-slate-500'>{tags}</div>
+            <div className='text-xs text-slate-500'>{tags.map((item,ined) => `#${item} `)}</div>
 
             <div className='flex gap-2 justify-end'>
                 <MdCreate

@@ -6,6 +6,9 @@ import AddEditNotes from './AddEditNotes'
 import Modal from 'react-modal'
 import axiosInstance from '../../utils/axiosInstance'
 import { useNavigate } from 'react-router-dom'
+import Toast from '../../components/ToastMessage/Toast'
+import EmptyCard from '../../components/EmptyCard/EmptyCard'
+import AddNotesImg from '../../assets/images/add-notes.PNG'
 
 const Home = () => {
 
@@ -14,8 +17,20 @@ const Home = () => {
     type: "add",
     data: null
   })
+
+  const [showToastMsg,setShowToastMsg] = useState({
+    isShown: false,
+    type: "add",
+    message: ""
+  })
+
+  const [allNotes,setAllNotes] = useState([])
   const [userInfo, setUserInfo] = useState(null)
   const navigate = useNavigate()
+
+  const handleEdit = (noteDetails) => {
+    setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" })
+  }
 
   // Get user info
   const getUserInfo = async() => {
@@ -33,9 +48,62 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    getUserInfo();
+  // Get all notes
+  const getAllNotes = async() => {
+    try {
+      const response = await axiosInstance.get("get-all-notes");
 
+      if (response.data && response.data.notes) {
+        setAllNotes(response.data.notes);
+      }
+
+    } catch (error) {
+      console.log("An unexpected error occured. Please try again.");
+      
+    }
+  }
+
+  // Delete Note
+  const deleteNote = async (data) => {
+    const noteId = data._id;
+    try {
+      const response = await axiosInstance.delete(`/delete-note/${noteId}`);
+
+      if (response.data && !response.data.error) {
+        showToastMessage("Note Deleted Successfully", "delete");
+        getAllNotes();
+      }
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.message
+      ) {
+        console.log("An unexpected error occured. Please try again.")
+      }
+    }
+  }
+
+  // Show Toast message
+  const showToastMessage = (message, type) => {
+    setShowToastMsg({
+      isShown: true,
+      message,
+      type
+    })
+  }
+
+  // close toast message
+  const handleCloseToast = () => {
+    setShowToastMsg({
+      isShown: false,
+      message: ""
+    })
+  }
+
+  useEffect(() => {
+    getAllNotes();
+    getUserInfo();
     return () => {}
   },[])
 
@@ -43,18 +111,48 @@ const Home = () => {
     <>
       <Navbar userInfo={userInfo} />
 
-      <div className='container mx-auto'>
+      <div className='container mx-auto px-8'>
+        {
+          allNotes.length > 0 ? (
+            <div className='grid grid-cols-3 gap-4 mt-8'>
+              {
+                allNotes.map((note,index) => (
+                  <NoteCard 
+                    key={note._id}
+                    title={note.title}
+                    date={note.createdOn}
+                    content={note.content}
+                    tags={note.tags}
+                    isPinned={note.isPinned}
+                    onEdit={() => handleEdit(note)}
+                    onDelete={() => deleteNote(note)}
+                    onPinNote={() => {}}
+                  />
+              ))}
+            </div>
+          ) : (
+            <EmptyCard 
+              imgSrc={AddNotesImg}
+              message={"Start creating your first note! Click the 'Add' button to jot down your thoughts, ideas and reminders. Let's get started!"}
+            />
+          )
+        }
         <div className='grid grid-cols-3 gap-4 mt-8'>
-          <NoteCard 
-            title="Meeting on 18th March"
-            date="18th Mar 2024"
-            content="meeting on 18th March  Meeting on 18th March"
-            tags="#Meeting"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          {
+            allNotes.map((note,index) => (
+              <NoteCard 
+                key={note._id}
+                title={note.title}
+                date={note.createdOn}
+                content={note.content}
+                tags={note.tags}
+                isPinned={note.isPinned}
+                onEdit={() => handleEdit(note)}
+                onDelete={() => deleteNote(note)}
+                onPinNote={() => {}}
+              />
+            ))
+          }
         </div>
       </div>
 
@@ -78,11 +176,20 @@ const Home = () => {
         <AddEditNotes
           type={openAddEditModal.type}
           noteData={openAddEditModal.data}
+          getAllNotes={getAllNotes}
           onClose={
             () => setOpenAddEditModal({isShown:false, type:"add", data:null})
           }
+          showToastMessage={showToastMessage}
         />
       </Modal>
+
+      <Toast
+        isShown={showToastMsg.isShown}
+        message={showToastMsg.message}
+        type={showToastMsg.type}
+        onClose={handleCloseToast}
+      />
     </>
   )
 }
