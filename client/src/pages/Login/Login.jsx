@@ -3,7 +3,7 @@ import Navbar from '../../components/Navbar'
 import { Link, useNavigate } from 'react-router-dom'
 import PasswordInput from '../../components/input/PasswordInput'
 import { validateEmail } from '../../utils/helper'
-import axiosInstance from '../../utils/axiosInstance'
+import axiosInstance from '../../utils/axiosInstance.js'
 
 const Login = () => {
     const [email,setEmail] = useState("")
