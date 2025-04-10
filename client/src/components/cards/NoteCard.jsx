@@ -22,7 +22,7 @@ const NoteCard = ({
             </div>
             
             <MdOutlinePushPin 
-                className={`icon-btn ${isPinned ? 'text-primary' : 'text-slate-300'}`}
+                className={`icon-btn ${isPinned ? 'text-primary' : 'text-slate-300'} hover:text-primary`}
                 onClick={onPinNote}
             />
         </div>
@@ -30,7 +30,7 @@ const NoteCard = ({
         <p>{content?.slice(0, 60)}</p>
 
         <div className=''>
-            <div className='text-xs text-slate-500'>{tags.map((item,ined) => `#${item} `)}</div>
+            <div className='text-xs text-slate-500'>{tags.map((item,index) => `#${item} `)}</div>
 
             <div className='flex gap-2 justify-end'>
                 <MdCreate

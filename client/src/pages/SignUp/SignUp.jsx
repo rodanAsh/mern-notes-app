@@ -104,7 +104,7 @@ const SignUp = () => {
               type='submit' 
               className='btn-primary'
             >
-              Login
+              Sign up
             </button>
 
             <p className='text-sm text-center mt-4'>

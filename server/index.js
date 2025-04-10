@@ -277,17 +277,18 @@ app.delete("/delete-note/:noteId", authenticateToken, async(req,res) => {
 app.put("/update-note-pinned/:noteId", authenticateToken, async(req,res) => {
     const noteId = req.params.noteId;
     const { isPinned } = req.body;
-    const { user } = re.user;
+    const { user } = req.user;
 
-    if (!isPinned) {
+    if (typeof isPinned !== "boolean") {
         return res.status(400).json({
             error: true,
+            pinned: isPinned,
             message: "No changes provided"
         })
     }
 
     try {
-        const note = await Note.findOne({ _id: noteId, uerId: user._id })
+        const note = await Note.findOne({ _id: noteId, userId: user._id })
 
         if (!note) {
             return res
@@ -301,6 +302,7 @@ app.put("/update-note-pinned/:noteId", authenticateToken, async(req,res) => {
 
         return res.json({
             error: false,
+            pinnedState: isPinned,
             message: "Note updated successfully"
         })
     } catch (error) {

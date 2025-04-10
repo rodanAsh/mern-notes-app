@@ -39,7 +39,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
     const editNote = async() => {
         const noteId = noteData._id;
         try {
-            const response = await axiosInstance.put("/edit-note/" + noteId, {
+            const response = await axiosInstance.put(`/edit-note/${noteId}`, {
                 title,
                 content,
                 tags
@@ -92,7 +92,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
             <label className='input-label'>TITLE</label>
             <input 
                 type="text" 
-                className='text-2xl text-slate-950 outline-none'
+                className='text-xl md:text-2xl text-slate-950 outline-none'
                 placeholder='Go To Gym At 5'
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -105,7 +105,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose, showToastMessage }
                 type='text'
                 className='text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded'
                 placeholder='Content'
-                rows={10}
+                rows={6}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
             />
