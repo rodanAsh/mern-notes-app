@@ -137,23 +137,6 @@ const Home = () => {
             />
           )
         }
-        <div className='grid grid-cols-3 gap-4 mt-8'>
-          {
-            allNotes.map((note,index) => (
-              <NoteCard 
-                key={note._id}
-                title={note.title}
-                date={note.createdOn}
-                content={note.content}
-                tags={note.tags}
-                isPinned={note.isPinned}
-                onEdit={() => handleEdit(note)}
-                onDelete={() => deleteNote(note)}
-                onPinNote={() => {}}
-              />
-            ))
-          }
-        </div>
       </div>
 
       <button 
