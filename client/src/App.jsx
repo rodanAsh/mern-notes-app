@@ -4,13 +4,22 @@ import MainPage from './pages/Main/MainPage'
 import Home from './pages/Home/Home'
 import SignUp from './pages/SignUp/SignUp'
 import Login from './pages/Login/Login'
+import ProtectedRoute from './components/ProtectedRoute'
 
 // Route setup
 const routes = (
   <Router>
     <Routes>
       <Route path='/' index element={<MainPage />} />
-      <Route path='/dashboard' exact element={<Home />} />
+      <Route 
+        path='/dashboard' 
+        exact 
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute> 
+        }
+      />
       <Route path='/login' exact element={<Login />} />
       <Route path='/signup' exact element={<SignUp />} />
     </Routes>
